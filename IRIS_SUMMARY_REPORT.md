@@ -1,7 +1,7 @@
 # Summary Report: Iris Classification Machine
 
 ## 1. Executive Summary
-We have successfully engineered a high-precision classification machine capable of identifying Iris flower species with **93.33% accuracy**. By leveraging a Neural Network architecture and rigorous 80/20 data partitioning, the machine demonstrates robust generalization capabilities on unseen data.
+We have successfully engineered a high-precision classification machine capable of identifying Iris flower species with **87.50% accuracy**. By leveraging a Neural Network architecture and rigorous 80/20 data partitioning, the machine demonstrates robust generalization capabilities on unseen data.
 
 ## 2. Dataset Description: The Iris Dataset
 The Iris dataset is a classic in the field of machine learning, first introduced by the British statistician Ronald Fisher in 1936.
