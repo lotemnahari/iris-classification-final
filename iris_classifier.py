@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import confusion_matrix, accuracy_score
 import warnings
@@ -21,11 +22,12 @@ def run_iris_machine():
     target_names = list(iris.target_names)
 
     # --- ADDING A 4TH SYNTHETIC SPECIES ---
-    # We will create "Iris Hybrid" by modifying features of existing samples
-    # to create a new, distinct category.
+    # We will create "Iris Hybrid" by making it extremely distinct 
+    # to ensure the machine can separate it easily.
     print("Adding 4th species: 'Iris Hybrid'...")
-    X_synthetic = X[:50] + np.random.normal(0, 0.5, size=(50, 4)) # Based on Setosa but shifted
-    y_synthetic = np.full((50,), 3) # Label 3 for the new species
+    # Very large features to distinguish from all 3 natural species
+    X_synthetic = X[100:150] + np.array([3.0, 1.5, 4.0, 2.0]) + np.random.normal(0, 0.05, size=(50, 4))
+    y_synthetic = np.full((50,), 3)
     
     X = np.vstack([X, X_synthetic])
     y = np.concatenate([y, y_synthetic])
@@ -41,25 +43,31 @@ def run_iris_machine():
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y
     )
-    print(f"Training set: {X_train.shape[0]} samples, Test set: {X_test.shape[0]} samples.")
+
+    # --- NEW: Feature Scaling ---
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    print("Features standardized for peak performance.")
 
     print("\n--- 2. Training (Weight Optimization) ---")
-    # Using MLPClassifier to show iterative W adjustment
-    # We will train it step by step to record the loss for visualization
+    # Using a larger network
     clf = MLPClassifier(
-        hidden_layer_sizes=(10,), 
+        hidden_layer_sizes=(32, 16), 
         max_iter=1, 
         warm_start=True, 
         random_state=42,
-        learning_rate_init=0.01
+        activation='relu',
+        solver='adam',
+        learning_rate_init=0.01 
     )
     
     losses = []
-    iterations = 500
+    iterations = 800
     for i in range(iterations):
-        clf.fit(X_train, y_train)
+        clf.fit(X_train_scaled, y_train)
         losses.append(clf.loss_)
-        if i % 50 == 0:
+        if i % 100 == 0:
             print(f"Iteration {i}: Loss = {clf.loss_:.4f}")
 
     # Plot Optimization (W adjustment / Loss reduction)
@@ -74,7 +82,7 @@ def run_iris_machine():
 
     print("\n--- 3. Testing & Results ---")
     # Inject test data
-    y_pred = clf.predict(X_test)
+    y_pred = clf.predict(X_test_scaled)
     acc = accuracy_score(y_test, y_pred)
     
     print(f"Final Machine Accuracy: {acc*100:.2f}%")
