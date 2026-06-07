@@ -13,18 +13,29 @@ warnings.filterwarnings("ignore")
 
 def run_iris_machine():
     print("--- 1. Data Preparation ---")
-    # Load Iris dataset
+    # Load Standard Iris dataset (3 species)
     iris = load_iris()
     X = iris.data
     y = iris.target
     feature_names = iris.feature_names
-    target_names = iris.target_names
+    target_names = list(iris.target_names)
 
+    # --- ADDING A 4TH SYNTHETIC SPECIES ---
+    # We will create "Iris Hybrid" by modifying features of existing samples
+    # to create a new, distinct category.
+    print("Adding 4th species: 'Iris Hybrid'...")
+    X_synthetic = X[:50] + np.random.normal(0, 0.5, size=(50, 4)) # Based on Setosa but shifted
+    y_synthetic = np.full((50,), 3) # Label 3 for the new species
+    
+    X = np.vstack([X, X_synthetic])
+    y = np.concatenate([y, y_synthetic])
+    target_names.append("hybrid")
+    
     # Save dataset to CSV as required
     df = pd.DataFrame(X, columns=feature_names)
     df['species'] = [target_names[i] for i in y]
     df.to_csv("iris_data.csv", index=False)
-    print("Dataset saved to iris_data.csv")
+    print("Dataset (with 4 species) saved to iris_data.csv")
 
     # 80/20 Split
     X_train, X_test, y_train, y_test = train_test_split(

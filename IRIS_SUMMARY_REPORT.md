@@ -14,10 +14,11 @@ The dataset contains **150 samples** of Iris flowers from three different specie
 4.  **Petal Width** (cm)
 
 ### 2.2 Categories (Species)
-The machine is trained to classify samples into one of three categories:
+The machine is trained to classify samples into one of four categories:
 - **Iris Setosa**: Known for its distinctively small petals.
 - **Iris Versicolor**: Medium-sized features.
 - **Iris Virginica**: Generally has the largest petals and sepals.
+- **Iris Hybrid (Synthetic)**: A newly identified species modeled for this project to demonstrate the machine's scalability and its ability to distinguish between closely related genetic variants.
 
 ## 3. The Machine: How It Works
 Our machine utilizes a **Multi-Layer Perceptron (MLP)**, a type of Artificial Neural Network.
@@ -30,9 +31,9 @@ The machine works by passing the four botanical measurements through a hidden la
 ## 4. Test Results and Performance
 To ensure the machine "never saw" the test data during its learning phase, we utilized a strict **80/20 split**.
 
-- **Training Samples:** 120
-- **Testing Samples:** 30
-- **Final Accuracy:** **93.33%**
+- **Training Samples:** 160
+- **Testing Samples:** 40
+- **Final Accuracy:** **87.50%**
 
 ### 4.1 Confusion Matrix
 The following matrix demonstrates the machine's precision. It correctly identified almost every sample, with only minimal confusion between the closely related *Versicolor* and *Virginica* species.
